@@ -1,0 +1,23 @@
+{
+  "analysis": "### Core Innovation\nSparseMM leverages the discovery that only ~5% of attention heads in MLLMs actively contribute to visual understanding. It introduces a training-free framework to identify these \"visual heads\" and implements asymmetric KV-Cache optimization that allocates computation budgets based on visual relevance scores.\n\n### Problem Addressed\nMLLMs suffer from computational inefficiency during inference due to uniform processing of all attention heads, despite most heads contributing minimally to visual understanding. Existing KV-Cache acceleration methods ignore the unique requirements of visual processing in multimodal contexts.\n\n### Methodological Highlights\n- Training-free framework for quantifying head-level visual relevance through targeted response analysis\n- Asymmetric computation budget allocation based on visual scores\n- KV-Cache optimization specifically designed for multimodal scenarios\n- Preserves visual semantics while accelerating decoding\n\n### Key Findings\n\u26a1 Only ~5% of attention heads in LLMs actively contribute to visual understanding\n- SparseMM achieves 1.38x real-time acceleration\n- 52% memory reduction during generation\n- Maintains performance parity on efficiency tests\n- Superior accuracy-efficiency trade-offs compared to prior KV-Cache methods\n\n### Limitations & Open Questions\n- Generalizability across different MLLM architectures unexplored\n- Long-term effects of head pruning on complex visual reasoning tasks\n- Optimal threshold for visual head selection remains empirical\n- Impact on emergent multimodal capabilities unclear\n\n### Transferable Techniques\n- **Sparse attention head identification** for other multimodal tasks\n- **Training-free relevance scoring** frameworks for model analysis\n- **Asymmetric resource allocation** based on task-specific importance\n- **Modality-aware optimization** strategies for cross-modal models\n- **Targeted response analysis** for understanding model behavior",
+  "arxiv": {
+    "arxiv_id": "2506.05344v1",
+    "title": "SparseMM: Head Sparsity Emerges from Visual Concept Responses in MLLMs",
+    "summary": "Multimodal Large Language Models (MLLMs) are commonly derived by extending\npre-trained Large Language Models (LLMs) with visual capabilities. In this\nwork, we investigate how MLLMs process visual inputs by analyzing their\nattention mechanisms. We reveal a surprising sparsity phenomenon: only a small\nsubset (approximately less than 5%) of attention heads in LLMs actively\ncontribute to visual understanding, termed visual heads. To identify these\nheads efficiently, we design a training-free framework that quantifies\nhead-level visual relevance through targeted response analysis. Building on\nthis discovery, we introduce SparseMM, a KV-Cache optimization strategy that\nallocates asymmetric computation budgets to heads in LLMs based on their visual\nscores, leveraging the sparity of visual heads for accelerating the inference\nof MLLMs. Compared with prior KV-Cache acceleration methods that ignore the\nparticularity of visual, SparseMM prioritizes stress and retaining visual\nsemantics during decoding. Extensive evaluations across mainstream multimodal\nbenchmarks demonstrate that SparseMM achieves superior accuracy-efficiency\ntrade-offs. Notably, SparseMM delivers 1.38x real-time acceleration and 52%\nmemory reduction during generation while maintaining performance parity on\nefficiency test. Our project is open sourced at\nhttps://github.com/CR400AF-A/SparseMM.",
+    "authors": [
+      "Jiahui Wang",
+      "Zuyan Liu",
+      "Yongming Rao",
+      "Jiwen Lu"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.05344v1",
+    "html_url": "http://arxiv.org/abs/2506.05344v1",
+    "published": "2025-06-05 17:59:55+00:00",
+    "updated": "2025-06-05 17:59:55+00:00",
+    "comment": null,
+    "primary_category": "cs.CV",
+    "categories": [
+      "cs.CV"
+    ]
+  }
+}

@@ -408,26 +408,21 @@ class AnthropicLLM(BaseLLM):
         system_message, anthropic_messages = self._convert_messages_anthropic(messages)
         
         try:
+            req_kwargs = dict(
+                model=model.value,
+                messages=anthropic_messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                **kwargs,
+            )
+            if system_message is not None:
+                req_kwargs["system"] = system_message
+
             if stream:
-                response = self.client.messages.create(
-                    model=model.value,
-                    messages=anthropic_messages,
-                    system=system_message,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    stream=True,
-                    **kwargs
-                )
+                response = self.client.messages.create(stream=True, **req_kwargs)
                 return response
             else:
-                response = self.client.messages.create(
-                    model=model.value,
-                    messages=anthropic_messages,
-                    system=system_message,
-                    temperature=temperature,
-                    max_tokens=max_tokens,
-                    **kwargs
-                )
+                response = self.client.messages.create(**req_kwargs)
                 
                 return LLMResponse(
                     content=response.content[0].text if response.content else "",
@@ -464,15 +459,18 @@ class AnthropicLLM(BaseLLM):
         system_message, anthropic_messages = self._convert_messages_anthropic(messages)
         
         try:
-            structured_response = instructor_client.messages.create(
+            req_kwargs = dict(
                 model=model.value,
                 messages=anthropic_messages,
-                system=system_message,
                 response_model=response_model,
                 temperature=temperature,
                 max_tokens=max_tokens,
-                **kwargs
+                **kwargs,
             )
+            if system_message is not None:
+                req_kwargs["system"] = system_message
+
+            structured_response = instructor_client.messages.create(**req_kwargs)
             
             return LLMResponse(
                 content=structured_response.model_dump_json(indent=2),
@@ -512,15 +510,18 @@ class AnthropicLLM(BaseLLM):
         system_message, anthropic_messages = self._convert_messages_anthropic(messages)
         
         try:
-            response = self.client.messages.create(
+            req_kwargs = dict(
                 model=model.value,
                 messages=anthropic_messages,
-                system=system_message,
                 tools=tools,
                 temperature=temperature,
                 max_tokens=max_tokens,
-                **kwargs
+                **kwargs,
             )
+            if system_message is not None:
+                req_kwargs["system"] = system_message
+
+            response = self.client.messages.create(**req_kwargs)
             
             # Extract tool calls from response
             tool_calls = []

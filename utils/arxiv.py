@@ -175,7 +175,7 @@ def _result_to_paper(result: _arxiv.Result) -> ArxivPaper:
         updated=result.updated,
         comment=getattr(result, "comment", None),
         primary_category=result.primary_category,
-        categories=[cat.term for cat in result.categories],
+        categories=[(cat.term if hasattr(cat, "term") else str(cat)) for cat in (result.categories or [])],
     )
 
 
