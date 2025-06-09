@@ -82,7 +82,7 @@ class ModelType(Enum):
     OR_GPT_4O = "openai/gpt-4o"
     OR_O3_MINI = "openai/o3-mini"
     OR_QWEN_3_235B = "qwen/qwen-3-235b"  # Latest Qwen 3 (2025)
-    OR_GEMINI_25_FLASH = "google/gemini-2.5-flash"  # Latest Gemini 2.5
+    OR_GEMINI_25_FLASH = "google/gemini-2.5-flash-preview-05-20"  # Latest Gemini 2.5
     OR_GEMINI_25_PRO = "google/gemini-2.5-pro-preview" # Gemini 2.5 Pro (June 2025)
 
 
@@ -203,6 +203,19 @@ class BaseLLM(ABC):
             }
             for msg in messages
         ]
+
+    # ------------------------------------------------------------------
+    # Vision helper (optional override by subclasses)
+    # ------------------------------------------------------------------
+
+    def vision_complete(
+        self,
+        messages: List[Message],
+        model: Optional[ModelType] = None,
+        **kwargs,
+    ) -> LLMResponse:
+        """Default vision_complete just calls complete (works for OpenAI-like schema)."""
+        return self.complete(messages, model=model, **kwargs)
 
 
 class OpenAILLM(BaseLLM):
@@ -362,6 +375,16 @@ class OpenAILLM(BaseLLM):
         except Exception as e:
             logger.error(f"OpenAI function calling error: {e}")
             raise
+
+    # OpenAI supports images in the same schema, so vision_complete == complete
+
+    def vision_complete(
+        self,
+        messages: List[Message],
+        model: Optional[ModelType] = None,
+        **kwargs,
+    ) -> LLMResponse:
+        return self.complete(messages, model=model, **kwargs)
 
 
 class AnthropicLLM(BaseLLM):
@@ -554,6 +577,74 @@ class AnthropicLLM(BaseLLM):
             )
         except Exception as e:
             logger.error(f"Anthropic function calling error: {e}")
+            raise
+
+    # ---------------------------- Vision -----------------------------
+
+    def _convert_vision_messages(self, messages: List[Message]):
+        """Convert messages that may include OpenAI-style image_url blocks to Anthropic format."""
+        system_msg, anth_msgs = [], []
+        for m in messages:
+            if m.role == "system":
+                system_msg.append(m.content)
+                continue
+            # Transform content if list with image_url
+            if isinstance(m.content, list):
+                new_content = []
+                for block in m.content:
+                    if isinstance(block, dict) and block.get("type") == "image_url":
+                        url = block["image_url"]["url"]
+                        if url.startswith("data:image"):
+                            media_type = url.split(";")[0].split(":")[1]
+                            b64_data = url.split(",", 1)[1]
+                            new_content.append({
+                                "type": "image",
+                                "media_type": media_type,
+                                "data": b64_data,
+                            })
+                        else:
+                            # Fallback to URL (Anthropic supports remote URLs too)
+                            new_content.append({
+                                "type": "image",
+                                "url": url,
+                            })
+                    elif isinstance(block, dict) and block.get("type") == "text":
+                        new_content.append({"type": "text", "text": block["text"]})
+                    else:
+                        new_content.append(block)
+                anth_msgs.append({"role": m.role, "content": new_content})
+            else:
+                anth_msgs.append({"role": m.role, "content": m.content})
+        system_message = "\n".join(system_msg) if system_msg else None
+        return system_message, anth_msgs
+
+    def vision_complete(
+        self,
+        messages: List[Message],
+        model: Optional[ModelType] = None,
+        **kwargs,
+    ) -> LLMResponse:
+        model = model or self.config.default_model or ModelType.CLAUDE_4_SONNET
+        system_message, anth_msgs = self._convert_vision_messages(messages)
+
+        try:
+            req_kwargs = {
+                "model": model.value,
+                "messages": anth_msgs,
+                **kwargs,
+            }
+            if system_message:
+                req_kwargs["system"] = system_message
+
+            response = self.client.messages.create(**req_kwargs)
+            return LLMResponse(
+                content=response.content[0].text if response.content else "",
+                model=response.model,
+                provider=LLMProvider.ANTHROPIC,
+                raw_response=response,
+            )
+        except Exception as exc:
+            logger.error(f"Anthropic vision completion error: {exc}")
             raise
 
 
@@ -853,3 +944,21 @@ class UnifiedLLM:
         
         llm = self.get_provider(provider)
         return llm.complete(messages, model=model, stream=True, **kwargs)
+
+    # ---------------- Vision convenience ---------------------------
+
+    def vision_complete(
+        self,
+        messages: List[Union[Message, Dict[str, Any]]],
+        provider: Optional[Union[LLMProvider, str]] = None,
+        model: Optional[Union[ModelType, str]] = None,
+        **kwargs,
+    ) -> LLMResponse:
+        if messages and isinstance(messages[0], dict):
+            messages = [Message(**msg) for msg in messages]
+
+        if isinstance(model, str):
+            model = ModelType(model)
+
+        llm = self.get_provider(provider)
+        return llm.vision_complete(messages, model=model, **kwargs)

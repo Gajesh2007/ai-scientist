@@ -6,7 +6,7 @@ authors = [
     {name = "Gajesh Naik",email = "robogajesh@gmail.com"}
 ]
 readme = "README.md"
-requires-python = "<4.0,>=3.9"
+requires-python = "<4.0,>=3.11"
 dependencies = [
     "openai (>=1.84.0,<2.0.0)",
     "anthropic (>=0.52.2,<0.53.0)",
@@ -14,6 +14,9 @@ dependencies = [
     "requests (>=2.31.0,<3.0.0)",
     "semanticscholar (>=0.7.0,<1.0.0)",
     "arxiv (>=2.2.0,<3.0.0)",
+    "pdf2image (>=1.17.0,<2.0.0)",
+    "pillow (>=10.0.0,<11.0.0)",
+    "rich (>=13.0.0,<14.0.0)",
 ]
 
 

@@ -9,7 +9,7 @@ Currently the module implements a single end-to-end pipeline:
 ### ➡️ `mix_and_match_strategy.py`
 A provider-agnostic pipeline that automatically:
 1. Fetches trending papers from **AlphaXiv**
-2. Pulls full metadata / abstracts from **arXiv**
+2. Pulls full metadata / abstracts from **arXiv** (with optional fulltext extraction)
 3. Summarises each paper via an LLM (Stage 1)
 4. Finds cross-domain paper pairs and synthesises connections (Stage 2)
 5. Drafts early-stage *Research Notes* for each pair (Stage 3)
@@ -23,6 +23,7 @@ python -m ideation.mix_and_match_strategy \
   --per-domain 3       # papers per domain
   --pairs 15          # max pairs to ideate on
   --model gpt-4o      # any model present in utils.llm.ModelType
+  --no-fulltext       # disable fulltext extraction (faster but less context)
 ```
 Environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `OPENROUTER_API_KEY`) are
 automatically detected.
@@ -39,6 +40,12 @@ Each markdown file contains:
 * Raw Stage 1 analyses for both papers
 * Structured Stage 2 synthesis (concept mapping, synergy hypotheses, …)
 * Five peer-review-ready *Research Notes* produced in Stage 3
+
+### Setup
+For fulltext PDF extraction, install poppler:
+- macOS: `brew install poppler`
+- Ubuntu/Debian: `sudo apt-get install poppler-utils`
+- Windows: Download from [poppler releases](https://github.com/oschwartz10612/poppler-windows/releases)
 
 ### Roadmap
 * Ranking / triage step based on novelty × feasibility JSON

@@ -43,6 +43,7 @@ from datetime import datetime
 
 from utils.alphaxiv import get_trending_papers, AlphaPaper
 from utils import arxiv as arxiv_api
+from utils import pdf_extraction
 from utils.llm import UnifiedLLM, Message, ModelType, LLMProvider
 
 logger = logging.getLogger(__name__)
@@ -149,7 +150,9 @@ class MixAndMatchEngine:
         idea_dir: str | Path = "ideation/ideas",
         cache_dir: str | Path = "ideation/cache",
         openai_model: ModelType | str | None = None,
+        vision_model: str | None = None,
         random_seed: int | None = None,
+        use_fulltext: bool = True,
     ) -> None:
         self.llm = llm or self._default_llm()
         self.idea_dir = Path(idea_dir)
@@ -160,6 +163,12 @@ class MixAndMatchEngine:
             random.seed(random_seed)
         # Timestamp for this run – used to avoid filename clashes
         self._run_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.use_fulltext = use_fulltext
+        # vision model
+        self._vision_model: str | None = vision_model
+        self._vision_provider: LLMProvider | None = None
+        if vision_model:
+            self._vision_provider = self._infer_provider_str(vision_model)
         # Normalise model argument – can be str or ModelType
         if openai_model is None:
             self._model: ModelType = ModelType.GPT_4O
@@ -278,12 +287,31 @@ class MixAndMatchEngine:
         abstract = getattr(paper, "summary", None) or getattr(paper, "abstract", None) or ""
         category = getattr(paper, "categories", ["Unknown"])[0] if hasattr(paper, "categories") else "Unknown"
         published = getattr(paper, "published", "Unknown")
+        context_block = ""
+        if self.use_fulltext and isinstance(paper, arxiv_api.ArxivPaper):
+            try:
+                vm = self._vision_model or self._model.value
+                vp = self._vision_provider or self._provider
+                doc = pdf_extraction.extract_pdf(
+                    arxiv_id=paper.arxiv_id,
+                    provider=vp,
+                    model=vm,
+                    maintain_format=False,
+                    concurrency=4,
+                    window_size=4,
+                )
+                context_block = (
+                    "\n\n---\n\n### Excerpt from full paper (truncated)\n"
+                    + doc.text
+                )
+            except Exception as exc:
+                logger.warning("Fulltext extraction failed for %s: %s", paper.arxiv_id, exc)
         prompt = _STAGE1_PROMPT.format(
-            title=title, 
+            title=title,
             abstract=abstract,
             category=category,
-            published=published
-        )
+            published=published,
+        ) + context_block
         messages = [Message(role="user", content=prompt)]
         resp = self.llm.complete(messages, model=self._model, provider=self._provider)
         return resp.content.strip()
@@ -320,12 +348,30 @@ class MixAndMatchEngine:
         abstract = getattr(paper, "summary", None) or getattr(paper, "abstract", None) or ""
         category = getattr(paper, "categories", ["Unknown"])[0] if hasattr(paper, "categories") else "Unknown"
         published = getattr(paper, "published", "Unknown")
+        context_block = ""
+        if self.use_fulltext and isinstance(paper, arxiv_api.ArxivPaper):
+            try:
+                vm = self._vision_model or self._model.value
+                vp = self._vision_provider or self._provider
+                doc = pdf_extraction.extract_pdf(
+                    arxiv_id=paper.arxiv_id,
+                    provider=vp,
+                    model=vm,
+                    maintain_format=False,
+                    concurrency=4,
+                    window_size=2,
+                )
+                context_block = (
+                    "\n\n---\n\n### Excerpt from full paper (truncated)\n" + doc.text
+                )
+            except Exception:
+                pass
         return _STAGE1_PROMPT.format(
             title=title,
             abstract=abstract,
             category=category,
-            published=published
-        )
+            published=published,
+        ) + context_block
 
     def _ideate_pair(
         self,
@@ -453,6 +499,19 @@ class MixAndMatchEngine:
         return LLMProvider.OPENAI
 
     @staticmethod
+    def _infer_provider_str(model_name: str) -> LLMProvider:
+        name = model_name.lower()
+        if name.startswith("anthropic/") or "claude" in name:
+            if name.startswith("anthropic/") or name.startswith("openai/") or "/" in name:
+                return LLMProvider.OPENROUTER
+            return LLMProvider.ANTHROPIC
+        if name.startswith("openai/") or "gpt-4" in name:
+            return LLMProvider.OPENROUTER
+        if "gemini" in name or name.startswith("google/"):
+            return LLMProvider.OPENROUTER
+        return LLMProvider.OPENAI
+
+    @staticmethod
     def _build_markdown(
         p1: AnalyzedPaper,
         p2: AnalyzedPaper,
@@ -531,10 +590,12 @@ if __name__ == "__main__":  # pragma: no cover
     parser.add_argument("--per-domain", type=int, default=4, help="Papers per domain")
     parser.add_argument("--pairs", type=int, default=20, help="Maximum paper pairs to ideate on")
     parser.add_argument("--model", type=str, default="gpt-4o", help="Model identifier to use (see utils.llm.ModelType)")
+    parser.add_argument("--vision-model", type=str, help="Vision model identifier for PDF OCR")
     parser.add_argument("--seed", type=int, default=None, help="Random seed for reproducibility")
+    parser.add_argument("--no-fulltext", action="store_false", dest="fulltext", help="Disable fulltext extraction")
     args = parser.parse_args()
 
-    engine = MixAndMatchEngine(openai_model=args.model, random_seed=args.seed)
+    engine = MixAndMatchEngine(openai_model=args.model, vision_model=args.vision_model, random_seed=args.seed, use_fulltext=args.fulltext)
     engine.run(
         num_trending=args.num,
         target_domains=args.domains,
