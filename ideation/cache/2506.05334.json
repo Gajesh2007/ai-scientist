@@ -1,0 +1,32 @@
+{
+  "analysis": "### Core Innovation\nThe creation of Search Arena, a large-scale, crowd-sourced dataset of over 24,000 paired, multi-turn user interactions with search-augmented LLMs, complete with human preference votes and full system traces.\n\n### Problem Addressed\nExisting datasets for analyzing search-augmented models are too small, static, and narrow, often limited to single-turn, fact-checking questions, which poorly reflects real-world conversational use.\n\n### Methodological Highlights\nA large-scale, paired-comparison framework was used to collect human preferences across diverse tasks and languages. The study also conducted a \"cross-arena\" analysis, testing search-enabled models in general chat and vice-versa to assess performance trade-offs.\n\n### Key Findings\n*   \u26a1 Users prefer responses with more citations, even when the cited content does not actually support the claims, revealing a gap between perceived and actual credibility.\n*   Community-driven platforms are often preferred as sources over static encyclopedias.\n*   Adding web search does not degrade, and may even improve, LLM performance in non-search conversational settings.\n\n### Limitations & Open Questions\nThe analysis relies on user preference, which may not perfectly correlate with factual accuracy. An open question is how to design systems that bridge the gap between perceived credibility (e.g., citation count) and factual groundedness.\n\n### Transferable Techniques (\u22653 bullet points)\n*   **Paired-Comparison for Specialized Tasks:** Use human preference on paired outputs as a robust evaluation method for specialized AI systems beyond general chat.\n*   **Cross-Domain Robustness Testing:** Evaluate specialized models in general-purpose contexts (and vice-versa) to understand performance boundaries and brittleness.\n*   **Analyzing Heuristics for Trust:** Investigate superficial features (like citation count or source type) that act as proxies for user trust in AI-generated content.",
+  "arxiv": {
+    "arxiv_id": "2506.05334v1",
+    "title": "Search Arena: Analyzing Search-Augmented LLMs",
+    "summary": "Search-augmented language models combine web search with Large Language\nModels (LLMs) to improve response groundedness and freshness. However,\nanalyzing these systems remains challenging: existing datasets are limited in\nscale and narrow in scope, often constrained to static, single-turn,\nfact-checking questions. In this work, we introduce Search Arena, a\ncrowd-sourced, large-scale, human-preference dataset of over 24,000 paired\nmulti-turn user interactions with search-augmented LLMs. The dataset spans\ndiverse intents and languages, and contains full system traces with around\n12,000 human preference votes. Our analysis reveals that user preferences are\ninfluenced by the number of citations, even when the cited content does not\ndirectly support the attributed claims, uncovering a gap between perceived and\nactual credibility. Furthermore, user preferences vary across cited sources,\nrevealing that community-driven platforms are generally preferred and static\nencyclopedic sources are not always appropriate and reliable. To assess\nperformance across different settings, we conduct cross-arena analyses by\ntesting search-augmented LLMs in a general-purpose chat environment and\nconventional LLMs in search-intensive settings. We find that web search does\nnot degrade and may even improve performance in non-search settings; however,\nthe quality in search settings is significantly affected if solely relying on\nthe model's parametric knowledge. We open-sourced the dataset to support future\nresearch in this direction. Our dataset and code are available at:\nhttps://github.com/lmarena/search-arena.",
+    "authors": [
+      "Mihran Miroyan",
+      "Tsung-Han Wu",
+      "Logan King",
+      "Tianle Li",
+      "Jiayi Pan",
+      "Xinyan Hu",
+      "Wei-Lin Chiang",
+      "Anastasios N. Angelopoulos",
+      "Trevor Darrell",
+      "Narges Norouzi",
+      "Joseph E. Gonzalez"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.05334v1",
+    "html_url": "http://arxiv.org/abs/2506.05334v1",
+    "published": "2025-06-05 17:59:26+00:00",
+    "updated": "2025-06-05 17:59:26+00:00",
+    "comment": "Preprint. Code: https://github.com/lmarena/search-arena. Dataset:\n  https://huggingface.co/datasets/lmarena-ai/search-arena-24k",
+    "primary_category": "cs.CL",
+    "categories": [
+      "cs.CL",
+      "cs.IR",
+      "cs.LG"
+    ]
+  }
+}

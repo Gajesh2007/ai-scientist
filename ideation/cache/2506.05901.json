@@ -1,0 +1,25 @@
+{
+  "analysis": "### Core Innovation\nA framework, R2-Reasoner, featuring a Reinforced Model Router that dynamically allocates sub-tasks of a complex problem to a heterogeneous set of language models (from small SLMs to large LLMs) based on estimated difficulty.\n\n### Problem Addressed\nThe prohibitive computational cost and token usage associated with deep, multi-step reasoning in large language models. Many sub-tasks in a complex reasoning chain are simple and do not require a powerful, expensive model.\n\n### Methodological Highlights\nA two-part router (task decomposer, subtask allocator) is trained via a staged pipeline. It begins with supervised fine-tuning and is then refined using a reinforcement learning algorithm, Group Relative Policy Optimization, to optimize the balance between accuracy and cost.\n\n### Key Findings\nThe R2-Reasoner framework significantly reduces API costs by 86.85% compared to baselines. \u26a1 It achieves this cost reduction while maintaining or even surpassing the accuracy of using a single, powerful LLM for the entire task.\n\n### Limitations & Open Questions\nThe framework's performance on tasks that are inherently difficult to decompose is unclear. The complexity and overhead of the two-stage training pipeline and the router's own inference cost are not detailed.\n\n### Transferable Techniques\n*   **Dynamic Model Routing:** Allocating sub-tasks to different computational models based on real-time complexity assessment.\n*   **Staged SFT + RL Training:** Combining supervised fine-tuning for initial policy learning with reinforcement learning for self-supervised refinement.\n*   **Automated Task Decomposition:** Using a dedicated model to break down complex inputs into a sequence of simpler, manageable steps before processing.",
+  "arxiv": {
+    "arxiv_id": "2506.05901v1",
+    "title": "Route-and-Reason: Scaling Large Language Model Reasoning with Reinforced Model Router",
+    "summary": "Multi-step reasoning has proven essential for enhancing the problem-solving\ncapabilities of Large Language Models (LLMs) by decomposing complex tasks into\nintermediate steps, either explicitly or implicitly. Extending the reasoning\nchain at test time through deeper thought processes or broader exploration, can\nfurthur improve performance, but often incurs substantial costs due to the\nexplosion in token usage. Yet, many reasoning steps are relatively simple and\ncan be handled by more efficient smaller-scale language models (SLMs). This\nmotivates hybrid approaches that allocate subtasks across models of varying\ncapacities. However, realizing such collaboration requires accurate task\ndecomposition and difficulty-aware subtask allocation, which is challenging. To\naddress this, we propose R2-Reasoner, a novel framework that enables\ncollaborative reasoning across heterogeneous LLMs by dynamically routing\nsub-tasks based on estimated complexity. At the core of our framework is a\nReinforced Model Router, composed of a task decomposer and a subtask allocator.\nThe task decomposer segments complex input queries into logically ordered\nsubtasks, while the subtask allocator assigns each subtask to the most\nappropriate model, ranging from lightweight SLMs to powerful LLMs, balancing\naccuracy and efficiency. To train this router, we introduce a staged pipeline\nthat combines supervised fine-tuning on task-specific datasets with Group\nRelative Policy Optimization algorithm, enabling self-supervised refinement\nthrough iterative reinforcement learning. Extensive experiments across four\nchallenging benchmarks demonstrate that R2-Reasoner reduces API costs by 86.85%\nwhile maintaining or surpassing baseline accuracy. Our framework paves the way\nfor more cost-effective and adaptive LLM reasoning. The code is open-source at\nhttps://anonymous.4open.science/r/R2_Reasoner .",
+    "authors": [
+      "Chenyang Shao",
+      "Xinyang Liu",
+      "Yutang Lin",
+      "Fengli Xu",
+      "Yong Li"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.05901v1",
+    "html_url": "http://arxiv.org/abs/2506.05901v1",
+    "published": "2025-06-06 09:18:56+00:00",
+    "updated": "2025-06-06 09:18:56+00:00",
+    "comment": null,
+    "primary_category": "cs.CL",
+    "categories": [
+      "cs.CL",
+      "cs.AI"
+    ]
+  }
+}

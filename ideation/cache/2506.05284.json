@@ -1,0 +1,26 @@
+{
+  "analysis": "### Core Innovation\nA geometry-grounded long-term spatial memory framework for video world models, enabling them to recall and maintain consistency in previously generated environments.\n\n### Problem Addressed\nStandard autoregressive video models suffer from \"forgetting\" due to limited context windows. When an agent revisits a location, the model often fails to render it consistently, breaking the illusion of a persistent world.\n\n### Methodological Highlights\nThe framework introduces explicit mechanisms to store generated scene information in a 3D spatial memory and retrieve it when a location is revisited. The authors also curated custom datasets designed to train and benchmark this long-term recall capability.\n\n### Key Findings\nModels equipped with the spatial memory demonstrate significant improvements in generation quality, scene consistency, and effective context length over baseline world models.\n\n### Limitations & Open Questions\nThe abstract does not address the computational cost or scalability of the memory system. Its effectiveness in highly dynamic environments with many moving objects or changing geometry remains an open question.\n\n### Transferable Techniques\n*   Augmenting generative models with an explicit, external memory module to overcome limited context windows.\n*   Grounding abstract model representations in a physical or geometric coordinate system (e.g., 3D space) to enforce real-world consistency.\n*   Creating specialized, task-specific datasets to train and robustly evaluate niche model capabilities like long-term recall.",
+  "arxiv": {
+    "arxiv_id": "2506.05284v1",
+    "title": "Video World Models with Long-term Spatial Memory",
+    "summary": "Emerging world models autoregressively generate video frames in response to\nactions, such as camera movements and text prompts, among other control\nsignals. Due to limited temporal context window sizes, these models often\nstruggle to maintain scene consistency during revisits, leading to severe\nforgetting of previously generated environments. Inspired by the mechanisms of\nhuman memory, we introduce a novel framework to enhancing long-term consistency\nof video world models through a geometry-grounded long-term spatial memory. Our\nframework includes mechanisms to store and retrieve information from the\nlong-term spatial memory and we curate custom datasets to train and evaluate\nworld models with explicitly stored 3D memory mechanisms. Our evaluations show\nimproved quality, consistency, and context length compared to relevant\nbaselines, paving the way towards long-term consistent world generation.",
+    "authors": [
+      "Tong Wu",
+      "Shuai Yang",
+      "Ryan Po",
+      "Yinghao Xu",
+      "Ziwei Liu",
+      "Dahua Lin",
+      "Gordon Wetzstein"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.05284v1",
+    "html_url": "http://arxiv.org/abs/2506.05284v1",
+    "published": "2025-06-05 17:42:34+00:00",
+    "updated": "2025-06-05 17:42:34+00:00",
+    "comment": "Project page: https://spmem.github.io/",
+    "primary_category": "cs.CV",
+    "categories": [
+      "cs.CV"
+    ]
+  }
+}

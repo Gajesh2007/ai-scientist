@@ -1,0 +1,25 @@
+{
+  "analysis": "### Core Innovation\nA novel, synthetic Q&A dataset based on fictional events, designed to disentangle verbatim sequence memorization from factual knowledge acquisition in language models.\n\n### Problem Addressed\nThe challenge of understanding *how* language models memorize facts, as distinct from simply memorizing training sequences verbatim. Existing datasets make it difficult to isolate these two learning mechanisms.\n\n### Methodological Highlights\nThe dataset is built from synthetically-generated, webtext-like documents describing fictional events. This controlled, fictional setting ensures that any knowledge the model demonstrates must have been acquired from the provided text, not prior training. The dataset includes paired question-answer sets for direct evaluation.\n\n### Key Findings\nTraining experiments confirm that using synthetic, fictional data is an effective method for teasing apart and studying the distinct processes of factual and verbatim memorization.\n\n### Limitations & Open Questions\nThe process of creating realistic-looking fictional synthetic data is challenging. A key open question is how to improve the fidelity of such generated data for more robust analysis.\n\n### Transferable Techniques\n*   Generating synthetic data to create controlled \"laboratories\" for testing specific LM capabilities.\n*   Using fictional scenarios and entities to eliminate confounding knowledge from a model's pre-training.\n*   Pairing source documents with targeted Q&A sets to directly probe factual recall and reasoning.",
+  "arxiv": {
+    "arxiv_id": "2506.05639v1",
+    "title": "A Fictional Q&A Dataset for Studying Memorization and Knowledge Acquisition",
+    "summary": "When language models are trained on textual data, they acquire both knowledge\nabout the structure of language as well as knowledge of facts about the world.\nAt inference time, their knowledge of facts can be leveraged to solve\ninteresting problems and perform useful knowledge work for users. It is well\nknown that language models can verbatim memorize long sequences from their\ntraining data. However, it is much less well understood how language models\nmemorize facts seen during training. In this work, we propose a new dataset to\nspecifically empower researchers to study the dual processes of fact\nmemorization and verbatim sequence memorization. The dataset consists of\nsynthetically-generated, webtext-like documents about fictional events, as well\nas question-answer pairs about the events. We conduct training experiments\nshowing how synthetic data about fictional events can be effective in teasing\napart different forms of memorization. We also document the challenges in\neffectively building realistic, fictional synthetic data.",
+    "authors": [
+      "John Kirchenbauer",
+      "Janny Mongkolsupawan",
+      "Yuxin Wen",
+      "Tom Goldstein",
+      "Daphne Ippolito"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.05639v1",
+    "html_url": "http://arxiv.org/abs/2506.05639v1",
+    "published": "2025-06-05 23:58:20+00:00",
+    "updated": "2025-06-05 23:58:20+00:00",
+    "comment": "10 pages and 8 figures in the main body",
+    "primary_category": "cs.CL",
+    "categories": [
+      "cs.CL",
+      "cs.LG"
+    ]
+  }
+}

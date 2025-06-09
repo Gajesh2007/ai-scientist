@@ -1,0 +1,29 @@
+{
+  "analysis": "### Core Innovation\nThe paper introduces \"parallel thinking,\" a test-time scaling method that generates multiple independent reasoning paths and uses a majority vote to select the most consistent answer. This provides a more effective use of the inference budget than simply extending a single line of thought.\n\n### Problem Addressed\nThe study challenges the belief that prompting models to \"think more\" (extended thinking) consistently improves reasoning. It investigates why this approach often leads to performance degradation or \"overthinking,\" making it an inefficient use of the inference budget.\n\n### Methodological Highlights\nThe authors conducted a broad empirical study on the effects of extended thinking. They developed a probabilistic model to explain the observed performance curve and proposed \"parallel thinking,\" a Best-of-N-inspired sampling method with a majority vote aggregator.\n\n### Key Findings\n*   \u26a1 Extended thinking shows non-monotonic performance: initial gains are followed by a decline.\n*   \u26a1 Observed improvements from extended thinking are artifacts of increased output variance, not genuine reasoning enhancement.\n*   Parallel thinking achieves up to 20% higher accuracy than extended thinking using the same inference budget.\n\n### Limitations & Open Questions\nThe optimal number of parallel paths (\"N\") for different tasks remains unexplored. It is also unclear if majority voting is the universally best aggregation method for all problem types.\n\n### Transferable Techniques (\u22653 bullet points)\n*   **Parallel Thinking:** Instead of deepening one analysis, generate multiple independent solutions and use voting/consensus to improve robustness.\n*   **Budget-Constrained Optimization:** When resources are fixed, allocate them across parallel, independent attempts (breadth) rather than a single, extended attempt (depth).\n*   **Variance as a Red Flag:** Monitor output variance in generative processes; a significant increase may signal instability or \"overthinking,\" not productive exploration.",
+  "arxiv": {
+    "arxiv_id": "2506.04210v1",
+    "title": "Does Thinking More always Help? Understanding Test-Time Scaling in Reasoning Models",
+    "summary": "Recent trends in test-time scaling for reasoning models (e.g., OpenAI o1,\nDeepSeek R1) have led to a popular belief that extending thinking traces using\nprompts like \"Wait\" or \"Let me rethink\" can improve performance. This raises a\nnatural question: Does thinking more at test-time truly lead to better\nreasoning? To answer this question, we perform a detailed empirical study\nacross models and benchmarks, which reveals a consistent pattern of initial\nperformance improvements from additional thinking followed by a decline, due to\n\"overthinking\". To understand this non-monotonic trend, we consider a simple\nprobabilistic model, which reveals that additional thinking increases output\nvariance-creating an illusion of improved reasoning while ultimately\nundermining precision. Thus, observed gains from \"more thinking\" are not true\nindicators of improved reasoning, but artifacts stemming from the connection\nbetween model uncertainty and evaluation metric. This suggests that test-time\nscaling through extended thinking is not an effective way to utilize the\ninference thinking budget. Recognizing these limitations, we introduce an\nalternative test-time scaling approach, parallel thinking, inspired by\nBest-of-N sampling. Our method generates multiple independent reasoning paths\nwithin the same inference budget and selects the most consistent response via\nmajority vote, achieving up to 20% higher accuracy compared to extended\nthinking. This provides a simple yet effective mechanism for test-time scaling\nof reasoning models.",
+    "authors": [
+      "Soumya Suvra Ghosal",
+      "Souradip Chakraborty",
+      "Avinash Reddy",
+      "Yifu Lu",
+      "Mengdi Wang",
+      "Dinesh Manocha",
+      "Furong Huang",
+      "Mohammad Ghavamzadeh",
+      "Amrit Singh Bedi"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.04210v1",
+    "html_url": "http://arxiv.org/abs/2506.04210v1",
+    "published": "2025-06-04 17:55:09+00:00",
+    "updated": "2025-06-04 17:55:09+00:00",
+    "comment": null,
+    "primary_category": "cs.AI",
+    "categories": [
+      "cs.AI",
+      "cs.CL"
+    ]
+  }
+}

@@ -39,6 +39,7 @@ from typing import List, Tuple, Dict, Any, Sequence
 import json
 import logging
 import random
+from datetime import datetime
 
 from utils.alphaxiv import get_trending_papers, AlphaPaper
 from utils import arxiv as arxiv_api
@@ -125,6 +126,8 @@ _STAGE3_PROMPT = (
     "<bullet list of 2-3 reasons this matters>\n\n"
     "**Sketch of Approach**\n"
     "<2-3 bullet steps outlining experimental plan / methodology>\n\n"
+    "**Resources Needed**\n"
+    "<datasets, compute, collaborators>\n\n"
     "**Open Questions**\n"
     "<bullet list of uncertainties / risks>\n"
     "---\n"
@@ -155,6 +158,8 @@ class MixAndMatchEngine:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         if random_seed is not None:
             random.seed(random_seed)
+        # Timestamp for this run – used to avoid filename clashes
+        self._run_ts = datetime.now().strftime("%Y%m%d_%H%M%S")
         # Normalise model argument – can be str or ModelType
         if openai_model is None:
             self._model: ModelType = ModelType.GPT_4O
@@ -356,7 +361,10 @@ class MixAndMatchEngine:
         stage3_resp = self.llm.complete(convo, model=self._model, provider=self._provider)
 
         # Persist to Markdown
-        out_path = (self.idea_dir / f"idea_pair_{idx:02d}_{p1.short_id}_{p2.short_id}.md").resolve()
+        out_path = (
+            self.idea_dir
+            / f"{self._run_ts}_pair{idx:02d}_{p1.short_id}_{p2.short_id}.md"
+        ).resolve()
         md = self._build_markdown(p1, p2, stage2_resp.content, stage3_resp.content)
         out_path.write_text(md)
         try:
@@ -364,6 +372,34 @@ class MixAndMatchEngine:
         except ValueError:
             display_path = out_path
         logger.info("Saved ideas → %s", display_path)
+
+        # --------------------------------------------------------------
+        # Append ideas to CSV for easy downstream querying
+        # --------------------------------------------------------------
+        ideas_csv = (self.idea_dir / "ideas.csv").resolve()
+        ideas = self._parse_ideas(stage3_resp.content)
+        from csv import DictWriter
+        fieldnames = [
+            "title",
+            "abstract",
+            "central_question",
+            "approach_summary",
+            "resources_needed",
+            "paper_a_id",
+            "paper_b_id",
+            "date_generated",
+        ]
+
+        with ideas_csv.open("a", newline="") as fh:
+            writer = DictWriter(fh, fieldnames=fieldnames)
+            if fh.tell() == 0:
+                writer.writeheader()
+            for idea in ideas:
+                idea.update({
+                    "paper_a_id": p1.short_id,
+                    "paper_b_id": p2.short_id,
+                })
+                writer.writerow({k: idea.get(k, "") for k in fieldnames})
 
     # ------------------------------------------------------------------
     # Helpers
@@ -438,6 +474,48 @@ class MixAndMatchEngine:
             ideas.strip() + "\n",
         ]
         return "\n".join(md_parts)
+
+    # ------------------------------------------------------------------
+    # Idea parsing helper
+    # ------------------------------------------------------------------
+
+    @staticmethod
+    def _parse_ideas(markdown_block: str) -> List[Dict[str, str]]:
+        """Extract ideas from Stage-3 markdown into structured dicts."""
+        import re, datetime
+
+        ideas: List[Dict[str, str]] = []
+        blocks = markdown_block.split("\n---")
+        for block in blocks:
+            block = block.strip()
+            if not block.startswith("#### Idea"):
+                continue
+
+            title_match = re.search(r"#### Idea \d+: (.+)", block)
+            title = title_match.group(1).strip() if title_match else ""
+
+            def extract_section(name: str) -> str:
+                pattern = rf"\*\*{name}\*\*\s*\n(.+?)(?:\n\s*\*\*|$)"
+                m = re.search(pattern, block, re.DOTALL)
+                return m.group(1).strip() if m else ""
+
+            abstract = extract_section(r"Research Abstract \(≤ 60 words\)")
+            central_q = extract_section("The Question")
+            approach = extract_section("Sketch of Approach")
+            resources = extract_section("Resources Needed")
+            date_field = extract_section("Date:") or datetime.date.today().isoformat()
+
+            ideas.append(
+                {
+                    "title": title,
+                    "abstract": abstract,
+                    "central_question": central_q,
+                    "approach_summary": approach,
+                    "resources_needed": resources,
+                    "date_generated": date_field,
+                }
+            )
+        return ideas
 
 
 # ---------------------------------------------------------------------------

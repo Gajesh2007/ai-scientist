@@ -1,0 +1,25 @@
+{
+  "analysis": "### Core Innovation\nA novel, LLM-centric taxonomy for classifying multimodal fusion techniques. This framework provides a structured method for analyzing and comparing how different sensory modalities are integrated into Large Language Models.\n\n### Problem Addressed\nThe lack of a systematic understanding of how to effectively connect and align diverse modal inputs (e.g., images, audio) with a pre-trained LLM backbone, which hinders principled model development.\n\n### Methodological Highlights\nA comprehensive survey analyzing 125 Multimodal Large Language Models (MLLMs) from 2021-2025. The core method is the creation of a three-dimensional classification framework focusing on architectural strategies, representation learning, and training paradigms.\n\n### Key Findings\nBy categorizing existing models, the survey identifies emerging design patterns and dominant strategies in MLLM development. The choice of fusion architecture, representation type, and training objective are critical, interconnected design decisions.\n\n### Limitations & Open Questions\nThe field still seeks more robust and efficient integration strategies. A key open question is how to design fusion mechanisms that enable deeper semantic alignment between language and other modalities beyond simple feature concatenation.\n\n### Transferable Techniques (\u22653 bullet points)\n*   Utilize the three-dimensional framework (architecture, representation, training) as a checklist for designing or deconstructing novel MLLMs.\n*   Evaluate new fusion architectures by their \"fusion level\"\u2014where and how modality-specific information is injected into the LLM.\n*   Frame representation learning choices explicitly as a decision between creating a \"joint\" (shared) or \"coordinate\" (aligned) embedding space.\n*   Systematically explore combinations of training strategies and objective functions as distinct design variables for optimizing modality alignment.",
+  "arxiv": {
+    "arxiv_id": "2506.04788v1",
+    "title": "Towards LLM-Centric Multimodal Fusion: A Survey on Integration Strategies and Techniques",
+    "summary": "The rapid progress of Multimodal Large Language Models(MLLMs) has transformed\nthe AI landscape. These models combine pre-trained LLMs with various modality\nencoders. This integration requires a systematic understanding of how different\nmodalities connect to the language backbone. Our survey presents an LLM-centric\nanalysis of current approaches. We examine methods for transforming and\naligning diverse modal inputs into the language embedding space. This addresses\na significant gap in existing literature. We propose a classification framework\nfor MLLMs based on three key dimensions. First, we examine architectural\nstrategies for modality integration. This includes both the specific\nintegration mechanisms and the fusion level. Second, we categorize\nrepresentation learning techniques as either joint or coordinate\nrepresentations. Third, we analyze training paradigms, including training\nstrategies and objective functions. By examining 125 MLLMs developed between\n2021 and 2025, we identify emerging patterns in the field. Our taxonomy\nprovides researchers with a structured overview of current integration\ntechniques. These insights aim to guide the development of more robust\nmultimodal integration strategies for future models built on pre-trained\nfoundations.",
+    "authors": [
+      "Jisu An",
+      "Junseok Lee",
+      "Jeoungeun Lee",
+      "Yongseok Son"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.04788v1",
+    "html_url": "http://arxiv.org/abs/2506.04788v1",
+    "published": "2025-06-05 09:14:41+00:00",
+    "updated": "2025-06-05 09:14:41+00:00",
+    "comment": "18 pages, 3 figures, 3 tables",
+    "primary_category": "cs.CL",
+    "categories": [
+      "cs.CL",
+      "cs.AI",
+      "cs.LG"
+    ]
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "analysis": "### Core Innovation\nSTARFlow, a scalable generative model for high-resolution image synthesis. It is built upon Transformer Autoregressive Flow (TARFlow), a novel architecture combining autoregressive transformers with the exact likelihood training of normalizing flows.\n\n### Problem Addressed\nThe historical inability of normalizing flows to scale effectively for high-resolution image generation, a domain dominated by diffusion models.\n\n### Methodological Highlights\nThe model operates in the latent space of a pretrained autoencoder. It employs a \"deep-shallow\" Transformer design for computational efficiency and a novel guidance algorithm to enhance sample quality, all while maintaining end-to-end, exact likelihood training without data discretization.\n\n### Key Findings\n\u26a1 STARFlow achieves competitive sample quality against state-of-the-art diffusion models in class- and text-conditional image synthesis. It is the first normalizing flow model demonstrated to operate effectively at this scale and resolution.\n\n### Limitations & Open Questions\nThe abstract omits explicit limitations. Key open questions include computational cost and inference speed compared to leading diffusion models, and whether this architecture can be extended to other data modalities like video or audio.\n\n### Transferable Techniques\n*   Modeling complex data in the latent space of a pretrained autoencoder.\n*   Using a \"deep-shallow\" architecture to balance model capacity and computational cost.\n*   Developing bespoke guidance algorithms to boost sample quality in generative models.",
+  "arxiv": {
+    "arxiv_id": "2506.06276v1",
+    "title": "STARFlow: Scaling Latent Normalizing Flows for High-resolution Image Synthesis",
+    "summary": "We present STARFlow, a scalable generative model based on normalizing flows\nthat achieves strong performance in high-resolution image synthesis. The core\nof STARFlow is Transformer Autoregressive Flow (TARFlow), which combines the\nexpressive power of normalizing flows with the structured modeling capabilities\nof Autoregressive Transformers. We first establish the theoretical universality\nof TARFlow for modeling continuous distributions. Building on this foundation,\nwe introduce several key architectural and algorithmic innovations to\nsignificantly enhance scalability: (1) a deep-shallow design, wherein a deep\nTransformer block captures most of the model representational capacity,\ncomplemented by a few shallow Transformer blocks that are computationally\nefficient yet substantially beneficial; (2) modeling in the latent space of\npretrained autoencoders, which proves more effective than direct pixel-level\nmodeling; and (3) a novel guidance algorithm that significantly boosts sample\nquality. Crucially, our model remains an end-to-end normalizing flow, enabling\nexact maximum likelihood training in continuous spaces without discretization.\nSTARFlow achieves competitive performance in both class-conditional and\ntext-conditional image generation tasks, approaching state-of-the-art diffusion\nmodels in sample quality. To our knowledge, this work is the first successful\ndemonstration of normalizing flows operating effectively at this scale and\nresolution.",
+    "authors": [
+      "Jiatao Gu",
+      "Tianrong Chen",
+      "David Berthelot",
+      "Huangjie Zheng",
+      "Yuyang Wang",
+      "Ruixiang Zhang",
+      "Laurent Dinh",
+      "Miguel Angel Bautista",
+      "Josh Susskind",
+      "Shuangfei Zhai"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.06276v1",
+    "html_url": "http://arxiv.org/abs/2506.06276v1",
+    "published": "2025-06-06 17:58:39+00:00",
+    "updated": "2025-06-06 17:58:39+00:00",
+    "comment": "TLDR: We show for the first time that normalizing flows can be scaled\n  for high-resolution and text-conditioned image synthesis",
+    "primary_category": "cs.CV",
+    "categories": [
+      "cs.CV"
+    ]
+  }
+}

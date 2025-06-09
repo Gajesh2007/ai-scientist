@@ -1,0 +1,26 @@
+{
+  "analysis": "### Core Innovation\nA minimal offline RL method, SHARSA (Scalable Horizon-Aware RL via Sarsa), that explicitly reduces the effective decision-making horizon to unlock scalability.\n\n### Problem Addressed\nExisting offline reinforcement learning algorithms exhibit poor scaling, failing to solve complex problems even when data, compute, and model capacity are massively increased. Their performance saturates well below optimal levels.\n\n### Methodological Highlights\nThe study validates its hypothesis by testing algorithms on datasets up to 1000x larger than typical benchmarks. It uses controlled experiments to isolate the long horizon as the key barrier to scalability and compares SHARSA against other horizon reduction techniques.\n\n### Key Findings\n*   \u26a1 Despite massive data scaling, many current offline RL algorithms fail to improve past a certain performance threshold.\n*   Long planning horizons are a fundamental bottleneck preventing effective scaling in offline RL.\n*   Techniques that explicitly reduce the effective horizon substantially enhance performance and scaling behavior.\n\n### Limitations & Open Questions\nThe abstract does not specify the theoretical underpinnings for why long horizons are so detrimental. The generalizability of SHARSA and the optimal degree of horizon reduction for different tasks remain open questions.\n\n### Transferable Techniques (\u22653 bullet points)\n*   Decompose long-horizon sequential decision problems by reducing the effective planning horizon to improve tractability.\n*   When evaluating algorithm scalability, stress-test by scaling datasets far beyond standard benchmarks to reveal performance saturation points.\n*   Instead of complex architectural changes, first investigate and address fundamental problem properties (like horizon length) as a path to scalability.",
+  "arxiv": {
+    "arxiv_id": "2506.04168v1",
+    "title": "Horizon Reduction Makes RL Scalable",
+    "summary": "In this work, we study the scalability of offline reinforcement learning (RL)\nalgorithms. In principle, a truly scalable offline RL algorithm should be able\nto solve any given problem, regardless of its complexity, given sufficient\ndata, compute, and model capacity. We investigate if and how current offline RL\nalgorithms match up to this promise on diverse, challenging, previously\nunsolved tasks, using datasets up to 1000x larger than typical offline RL\ndatasets. We observe that despite scaling up data, many existing offline RL\nalgorithms exhibit poor scaling behavior, saturating well below the maximum\nperformance. We hypothesize that the horizon is the main cause behind the poor\nscaling of offline RL. We empirically verify this hypothesis through several\nanalysis experiments, showing that long horizons indeed present a fundamental\nbarrier to scaling up offline RL. We then show that various horizon reduction\ntechniques substantially enhance scalability on challenging tasks. Based on our\ninsights, we also introduce a minimal yet scalable method named SHARSA that\neffectively reduces the horizon. SHARSA achieves the best asymptotic\nperformance and scaling behavior among our evaluation methods, showing that\nexplicitly reducing the horizon unlocks the scalability of offline RL. Code:\nhttps://github.com/seohongpark/horizon-reduction",
+    "authors": [
+      "Seohong Park",
+      "Kevin Frans",
+      "Deepinder Mann",
+      "Benjamin Eysenbach",
+      "Aviral Kumar",
+      "Sergey Levine"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.04168v1",
+    "html_url": "http://arxiv.org/abs/2506.04168v1",
+    "published": "2025-06-04 17:06:54+00:00",
+    "updated": "2025-06-04 17:06:54+00:00",
+    "comment": null,
+    "primary_category": "cs.LG",
+    "categories": [
+      "cs.LG",
+      "cs.AI"
+    ]
+  }
+}

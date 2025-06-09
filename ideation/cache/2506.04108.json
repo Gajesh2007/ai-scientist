@@ -1,0 +1,28 @@
+{
+  "analysis": "### Core Innovation\nRectified Sparse Attention (ReSA), a hybrid method that combines efficient block-sparse attention with periodic dense attention to improve long-sequence generation.\n\n### Problem Addressed\nKV cache misalignment in sparse decoding methods, where approximation errors accumulate over long sequences, degrading generation quality and causing divergence from the original model's behavior.\n\n### Methodological Highlights\nReSA alternates between fast, block-sparse attention for most generation steps and a full, dense attention forward pass at fixed intervals. This periodic \"rectification\" refreshes the KV cache, effectively bounding cumulative errors and preserving alignment with the pretraining distribution.\n\n### Key Findings\nReSA achieves near-lossless generation quality on tasks like math reasoning and language modeling. It delivers significant efficiency gains, achieving up to a 2.42\u00d7 end-to-end speedup when decoding at a 256K sequence length.\n\n### Limitations & Open Questions\nThe optimal frequency for dense rectification is a critical hyperparameter. The performance trade-off between the overhead of the periodic dense pass and the gains from sparse attention needs characterization across different hardware and task types.\n\n### Transferable Techniques (\u22653 bullet points)\n*   **Periodic Rectification:** Correcting an efficient, approximate process with an occasional exact one to bound cumulative error in any iterative system.\n*   **Hybrid Sparse-Dense Computation:** Strategically combining sparse and dense operations to balance computational performance and accuracy.\n*   **Stateful Error Correction:** Refreshing a cached state (like the KV cache) at fixed intervals to prevent model drift in long-running generative processes.",
+  "arxiv": {
+    "arxiv_id": "2506.04108v2",
+    "title": "Rectified Sparse Attention",
+    "summary": "Efficient long-sequence generation is a critical challenge for Large Language\nModels. While recent sparse decoding methods improve efficiency, they suffer\nfrom KV cache misalignment, where approximation errors accumulate and degrade\ngeneration quality. In this work, we propose Rectified Sparse Attention (ReSA),\na simple yet effective method that combines block-sparse attention with\nperiodic dense rectification. By refreshing the KV cache at fixed intervals\nusing a dense forward pass, ReSA bounds error accumulation and preserves\nalignment with the pretraining distribution. Experiments across math reasoning,\nlanguage modeling, and retrieval tasks demonstrate that ReSA achieves\nnear-lossless generation quality with significantly improved efficiency.\nNotably, ReSA delivers up to 2.42$\\times$ end-to-end speedup under decoding at\n256K sequence length, making it a practical solution for scalable long-context\ninference. Code is available at https://aka.ms/ReSA-LM.",
+    "authors": [
+      "Yutao Sun",
+      "Tianzhu Ye",
+      "Li Dong",
+      "Yuqing Xia",
+      "Jian Chen",
+      "Yizhao Gao",
+      "Shijie Cao",
+      "Jianyong Wang",
+      "Furu Wei"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.04108v2",
+    "html_url": "http://arxiv.org/abs/2506.04108v2",
+    "published": "2025-06-04 16:01:48+00:00",
+    "updated": "2025-06-05 05:39:48+00:00",
+    "comment": null,
+    "primary_category": "cs.CL",
+    "categories": [
+      "cs.CL"
+    ]
+  }
+}

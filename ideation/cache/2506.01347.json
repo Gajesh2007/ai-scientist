@@ -1,0 +1,26 @@
+{
+  "analysis": "### Core Innovation\nDecomposing the reinforcement learning signal into positive (rewarding) and negative (penalizing) components, and discovering that training exclusively on negative samples (NSR) is a highly effective method for improving LLM reasoning.\n\n### Problem Addressed\nUnderstanding the mechanisms of Reinforcement Learning with Verifiable Rewards (RLVR) for complex reasoning tasks, and identifying more effective ways to leverage both correct and incorrect model generations during training.\n\n### Methodological Highlights\nThe study isolates the effects of rewarding correct solutions (Positive Sample Reinforcement, PSR) and penalizing incorrect ones (NSR). By training models with only NSR, they analyze its impact on performance and use gradient analysis to reveal how it refines the model's probability distribution.\n\n### Key Findings\n*   \u26a1 Training with only negative samples consistently improves reasoning performance across the full Pass@k spectrum, often matching or outperforming standard PPO.\n*   Reinforcing only correct answers improves single-best-answer accuracy (Pass@1) but harms sample diversity and performance at higher k.\n*   NSR refines the model's existing knowledge by suppressing incorrect paths and redistributing probability to other plausible candidates.\n\n### Limitations & Open Questions\nThe study focuses on mathematical reasoning; the generalizability to other domains is an open question. The optimal weighting between positive and negative reinforcement is likely task-dependent.\n\n### Transferable Techniques (\u22653 bullet points)\n*   **Negative-Only Training:** For tasks with verifiable failures (e.g., code that fails tests), train models by only penalizing incorrect outputs to improve performance and sampling diversity.\n*   **Decompositional Analysis:** Isolate and evaluate individual components of a complex training signal (e.g., rewards, penalties, losses) to understand their distinct contributions.\n*   **Upweighting Negative Penalties:** In standard RL, consider increasing the penalty for incorrect reasoning paths relative to the reward for correct ones to boost overall performance.",
+  "arxiv": {
+    "arxiv_id": "2506.01347v1",
+    "title": "The Surprising Effectiveness of Negative Reinforcement in LLM Reasoning",
+    "summary": "Reinforcement learning with verifiable rewards (RLVR) is a promising approach\nfor training language models (LMs) on reasoning tasks that elicit emergent long\nchains of thought (CoTs). Unlike supervised learning, it updates the model\nusing both correct and incorrect samples via policy gradients. To better\nunderstand its mechanism, we decompose the learning signal into reinforcing\ncorrect responses and penalizing incorrect ones, referred to as Positive and\nNegative Sample Reinforcement (PSR and NSR), respectively. We train\nQwen2.5-Math-7B and Qwen3-4B on a mathematical reasoning dataset and uncover a\nsurprising result: training with only negative samples -- without reinforcing\ncorrect responses -- can be highly effective: it consistently improves\nperformance over the base model across the entire Pass@$k$ spectrum ($k$ up to\n$256$), often matching or surpassing PPO and GRPO. In contrast, reinforcing\nonly correct responses improves Pass@$1$ but degrades performance at higher\n$k$, due to reduced diversity. These inference-scaling trends highlight that\nsolely penalizing incorrect responses may contribute more to performance than\npreviously recognized. Through gradient analysis, we show that NSR works by\nsuppressing incorrect generations and redistributing probability mass toward\nother plausible candidates, guided by the model's prior beliefs. It refines the\nmodel's existing knowledge rather than introducing entirely new behaviors.\nBuilding on this insight, we propose a simple variant of the RL objective that\nupweights NSR, and show that it consistently improves overall Pass@$k$\nperformance on MATH, AIME 2025, and AMC23. Our code is available at\nhttps://github.com/TianHongZXY/RLVR-Decomposed.",
+    "authors": [
+      "Xinyu Zhu",
+      "Mengzhou Xia",
+      "Zhepei Wei",
+      "Wei-Lin Chen",
+      "Danqi Chen",
+      "Yu Meng"
+    ],
+    "pdf_url": "http://arxiv.org/pdf/2506.01347v1",
+    "html_url": "http://arxiv.org/abs/2506.01347v1",
+    "published": "2025-06-02 06:10:54+00:00",
+    "updated": "2025-06-02 06:10:54+00:00",
+    "comment": null,
+    "primary_category": "cs.CL",
+    "categories": [
+      "cs.CL",
+      "cs.LG"
+    ]
+  }
+}
